@@ -124,5 +124,10 @@ public class ToolBarX {
         return this;
     }
 
+    public ToolBarX hide(){
+        mActionBar.hide();
+        return this;
+    }
+
 
 }
