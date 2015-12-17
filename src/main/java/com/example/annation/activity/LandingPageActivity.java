@@ -56,6 +56,7 @@ public class LandingPageActivity extends BaseActivity {
                 public void onComplete(Bundle bundle) {
                     Log.d("LandingPageActivity", bundle + "");
                     Oauth2AccessToken token = Oauth2AccessToken.parseAccessToken(bundle);
+                    //把得到的token保存到本地
                     mPreferenceUtils.saveToken(token);
                     startActivity(new Intent(LandingPageActivity.this, HomePageActivity.class));
                     finish();

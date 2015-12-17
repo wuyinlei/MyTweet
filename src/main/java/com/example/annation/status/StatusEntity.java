@@ -1,5 +1,7 @@
 package com.example.annation.status;
 
+import java.util.List;
+
 /**
  * Created by ruolan on 2015/12/16.
  * 一个懂得了编程乐趣的小白，希望自己
@@ -27,121 +29,59 @@ public class StatusEntity {
      * in_reply_to_screen_name :
      */
 
-    private String created_at;
-    private long id;
-    private String mid;
-    private String idstr;
-    private String text;
-    private int source_allowclick;
-    private int source_type;
-    private String source;
-    private boolean favorited;
-    private boolean truncated;
-    private String in_reply_to_status_id;
-    private String in_reply_to_user_id;
-    private String in_reply_to_screen_name;
+    /**
+     * 返回值字段	             字段类型	        字段说明
+     * created_at   	        string	          微博创建时间
+     * id	                   int64	          微博ID
+     * mid	                   int64	          微博MID
+     * idstr	               string           字符串型的微博ID
+     * text	                   string	        微博信息内容
+     * source	               string	        微博来源
+     * favorited	          boolean	        是否已收藏，true：是，false：否
+     * truncated	           boolean	        是否被截断，true：是，false：否
+     * in_reply_to_status_id	string	    （暂未支持）回复ID
+     * in_reply_to_user_id	    string	    （暂未支持）回复人UID
+     * in_reply_to_screen_name	string	    （暂未支持）回复人昵称
+     * thumbnail_pic	        string	     缩略图片地址，没有时不返回此字段
+     * bmiddle_pic	            string      	中等尺寸图片地址，没有时不返回此字段
+     * original_pic	            string	        原始图片地址，没有时不返回此字段
+     * geo	                    object      	地理信息字段 详细
+     * user	                    object	        微博作者的用户信息字段 详细
+     * retweeted_status     	object	        被转发的原微博信息字段，当该微博为转发微博时返回 详细
+     * reposts_count	        int	                转发数
+     * comments_count	        int	                评论数
+     * attitudes_count	        int	                表态数
+     * mlevel	                int	                暂未支持
+     * visible	                object	            微博的可见性及指定可见分组信息。该object中type取值，0：普通微博，1：私密微博，3：指定分组微博，4：密友微博；list_id为分组的组号
+     * pic_ids	                object	            微博配图ID。多图时返回多图ID，用来拼接图片url。用返回字段thumbnail_pic的地址配上该返回字段的图片ID，即可得到多个图片url。
+     * ad	                    object              array	微博流内的推广微博ID
+     */
 
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
-    }
+    public String created_at;
+    public long id;
+    public String mid;
+    public String idstr;
+    public String text;
+    public int source_allowclick;
+    public int source_type;
+    public String source;
+    public boolean favorited;
+    public boolean truncated;
+    public String in_reply_to_status_id;
+    public String in_reply_to_user_id;
+    public String in_reply_to_screen_name;
+    public String thumbnail_pic;
+    public String bmiddle_pic;
+    public String original_pic;
+    public Object geo;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    public List<PicUrlsEntity> pic_urls;
+    public UserEntity user;
+    public StatusEntity retweeted_status;
+    public int reposts_count;
+    public int comments_count;
+    public int attitudes_count;
 
-    public void setMid(String mid) {
-        this.mid = mid;
-    }
+    public int deleted;
 
-    public void setIdstr(String idstr) {
-        this.idstr = idstr;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public void setSource_allowclick(int source_allowclick) {
-        this.source_allowclick = source_allowclick;
-    }
-
-    public void setSource_type(int source_type) {
-        this.source_type = source_type;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    public void setFavorited(boolean favorited) {
-        this.favorited = favorited;
-    }
-
-    public void setTruncated(boolean truncated) {
-        this.truncated = truncated;
-    }
-
-    public void setIn_reply_to_status_id(String in_reply_to_status_id) {
-        this.in_reply_to_status_id = in_reply_to_status_id;
-    }
-
-    public void setIn_reply_to_user_id(String in_reply_to_user_id) {
-        this.in_reply_to_user_id = in_reply_to_user_id;
-    }
-
-    public void setIn_reply_to_screen_name(String in_reply_to_screen_name) {
-        this.in_reply_to_screen_name = in_reply_to_screen_name;
-    }
-
-    public String getCreated_at() {
-        return created_at;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getMid() {
-        return mid;
-    }
-
-    public String getIdstr() {
-        return idstr;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public int getSource_allowclick() {
-        return source_allowclick;
-    }
-
-    public int getSource_type() {
-        return source_type;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public boolean isFavorited() {
-        return favorited;
-    }
-
-    public boolean isTruncated() {
-        return truncated;
-    }
-
-    public String getIn_reply_to_status_id() {
-        return in_reply_to_status_id;
-    }
-
-    public String getIn_reply_to_user_id() {
-        return in_reply_to_user_id;
-    }
-
-    public String getIn_reply_to_screen_name() {
-        return in_reply_to_screen_name;
-    }
 }

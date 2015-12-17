@@ -1,29 +1,28 @@
 package com.example.annation.fragment;
 
-import android.content.ComponentCallbacks;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.annation.R;
+import com.example.annation.adapter.HomeAdapter;
+import com.example.annation.http.BaseNetWork;
+import com.example.annation.http.HttpResponse;
 import com.example.annation.status.StatusEntity;
 import com.example.annation.uri.Contants;
+import com.example.annation.uri.ParameterKeySet;
+import com.example.annation.utils.DividerItemDecoration;
+import com.example.annation.utils.LogUtils;
 import com.example.annation.utils.PreferenceUtils;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.sina.weibo.sdk.constant.WBConstants;
-import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.AsyncWeiboRunner;
-import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.net.WeiboParameters;
 
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -41,28 +40,98 @@ import java.util.List;
 
 public class HomeFragment extends BaseFragment {
 
-    private AsyncWeiboRunner mAsyncWeiboRunner;
     private WeiboParameters mParameters;
-
+    private AsyncWeiboRunner mAsyncWeiboRunner;
     private PreferenceUtils mPreferenceUtils;
 
-    private String heepMethod;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.ItemDecoration mItemDecoration;
+
+    private List<StatusEntity> mEntities;
+
+    private HomeAdapter mHomeAdapter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAsyncWeiboRunner = new AsyncWeiboRunner(getActivity());
         mParameters = new WeiboParameters(Contants.APP_KEY);
-        heepMethod = "GET";
         mPreferenceUtils = PreferenceUtils.getInstance(getActivity());
+        mEntities = new ArrayList<>();
+        mHomeAdapter = new HomeAdapter(mEntities);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        mParameters.put(WBConstants.AUTH_ACCESS_TOKEN, mPreferenceUtils.getToken().getToken());
+        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.tweet_commen_recycleview, container, false);
+        initAdapter();
+
+        /**
+         * {
+         "statuses": [
+         {
+         "created_at": "Tue May 31 17:46:55 +0800 2011",
+         "id": 11488058246,
+         "text": "求关注。"，
+         "source": "<a href="http://weibo.com" rel="nofollow">新浪微博</a>",
+         "favorited": false,
+         "truncated": false,
+         "in_reply_to_status_id": "",
+         "in_reply_to_user_id": "",
+         "in_reply_to_screen_name": "",
+         "geo": null,
+         "mid": "5612814510546515491",
+         "reposts_count": 8,
+         "comments_count": 9,
+         "annotations": [],
+         "user": {
+         "id": 1404376560,
+         "screen_name": "zaku",
+         "name": "zaku",
+         "province": "11",
+         "city": "5",
+         "location": "北京 朝阳区",
+         "description": "人生五十年，乃如梦如幻；有生斯有死，壮士复何憾。",
+         "url": "http://blog.sina.com.cn/zaku",
+         "profile_image_url": "http://tp1.sinaimg.cn/1404376560/50/0/1",
+         "domain": "zaku",
+         "gender": "m",
+         "followers_count": 1204,
+         "friends_count": 447,
+         "statuses_count": 2908,
+         "favourites_count": 0,
+         "created_at": "Fri Aug 28 00:00:00 +0800 2009",
+         "following": false,
+         "allow_all_act_msg": false,
+         "remark": "",
+         "geo_enabled": true,
+         "verified": false,
+         "allow_all_comment": true,
+         "avatar_large": "http://tp1.sinaimg.cn/1404376560/180/0/1",
+         "verified_reason": "",
+         "follow_me": false,
+         "online_status": 0,
+         "bi_followers_count": 215
+         }
+         },
+         ...
+         ],
+         "ad": [
+         {
+         "id": 3366614911586452,
+         "mark": "AB21321XDFJJK"
+         },
+         ...
+         ],
+         "previous_cursor": 0,      // 暂时不支持
+         "next_cursor": 11488013766,     // 暂时不支持
+         "total_number": 81655
+         }
+         */
+      /*  mParameters.put(WBConstants.AUTH_ACCESS_TOKEN, mPreferenceUtils.getToken().getToken());
         //请求地址、参数、请求类型、请求回调
-        mAsyncWeiboRunner.requestAsync(Contants.API.HOME_TIMELINE, mParameters, heepMethod, new RequestListener() {
+        mAsyncWeiboRunner.requestAsync(Contants.API.HOME_TIMELINE, mParameters, "GET", new RequestListener() {
 
             @Override
             public void onComplete(String s) {
@@ -72,7 +141,7 @@ public class HomeFragment extends BaseFragment {
                 List<StatusEntity> list = new ArrayList<StatusEntity>();
                 Type type = new TypeToken<List<StatusEntity>>() {
                 }.getType();
-                list = new Gson().fromJson(array,type);
+                list = new Gson().fromJson(array, type);
                 Log.d("HomeFragment", "list.size():" + list.size());
             }
 
@@ -80,8 +149,48 @@ public class HomeFragment extends BaseFragment {
             public void onWeiboException(WeiboException e) {
 
             }
-        });
+        });*/
+        new BaseNetWork(getActivity(), Contants.API.HOME_TIMELINE) {
+            @Override
+            public WeiboParameters onPrepares() {
+                mParameters.put(ParameterKeySet.AUTH_ACCESS_TOKEN, mPreferenceUtils.getToken().getToken());
+                mParameters.put(ParameterKeySet.PAGE, 1);
+                mParameters.put(ParameterKeySet.COUNT, 10);
+                return mParameters;
+            }
 
-        return view;
+            @Override
+            public void onFinish(HttpResponse response, boolean success) {
+                if (success) {
+                    List<StatusEntity> list = new ArrayList<StatusEntity>();
+                    Type type = new TypeToken<List<StatusEntity>>() {
+                    }.getType();
+                    list = new Gson().fromJson(response.response, type);
+                    if (null != list && list.size() > 0) {
+                        mEntities.clear();
+                        mEntities.addAll(list);
+                    }
+                    mHomeAdapter.notifyDataSetChanged();
+                    Log.d("HomeFragment", "list.size():" + list.size());
+                } else {
+                    Log.d("HomeFragment", "error");
+                }
+            }
+        }.get();
+        return mRecyclerView;
+    }
+
+    private void initAdapter() {
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mItemDecoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
+        mRecyclerView.addItemDecoration(mItemDecoration);
+        mRecyclerView.setAdapter(mHomeAdapter);
+        mHomeAdapter.onItemClickListener(new HomeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(View v, int position) {
+                LogUtils.d(position + "");
+            }
+        });
     }
 }

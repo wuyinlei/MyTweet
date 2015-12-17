@@ -30,29 +30,42 @@ public class PreferenceUtils {
 
     }
 
+    /**
+     * 利用了单例模式
+     * @param context
+     * @return
+     */
     public static PreferenceUtils getInstance(Context context) {
         if (instance == null) {
-            synchronized (PreferenceUtils.class) {
+            synchronized (PreferenceUtils.class) {   //保证线程安全
                 instance = new PreferenceUtils();
+                //第一步是获取SharePreference的实例，有三种方式
+                //这里直接通过getSharePreference直接获得
                 mSharePerences = context.getSharedPreferences(SP_NAME, Activity.MODE_PRIVATE);
+                //通过SharePreference的实例通过mSharePerences.edit()获取到SharedPreferences.Editor的实例
                 mEditor = mSharePerences.edit();
             }
         }
         return instance;
     }
 
-    public Oauth2AccessToken getToken(){
+    public  Oauth2AccessToken  getToken(){
         String json = mSharePerences.getString(ACCESS_TOKEN,"");
-        if (TextUtils.isEmpty(json)){
+        if(TextUtils.isEmpty(json)){
             return null;
         }
         return new Gson().fromJson(json,Oauth2AccessToken.class);
     }
     public void saveToken(Oauth2AccessToken accessToken) {
+        //然后就可以通过获取到的editor的实例来存储对象了，最后调用commit()这个方法提交保存的数据
         mEditor.putString(ACCESS_TOKEN, new Gson().toJson(accessToken)).commit();
         mEditor.putBoolean(IS_LOGIN, true).commit();
     }
 
+    /**
+     * 判断之前是否登录了，返回的是boolean
+     * @return
+     */
     public boolean isLogin() {
         return mSharePerences.getBoolean(IS_LOGIN, false);
     }

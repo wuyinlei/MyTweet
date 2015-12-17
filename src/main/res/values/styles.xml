@@ -36,4 +36,35 @@
         <item name="android:src">@mipmap/actionbar_add_icon</item>
     </style>
 
+    <style name="tv_m_yellow_sl">
+        <item name="android:textSize">@dimen/txt_m</item>
+        <item name="android:textColor">@color/tweet_red</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <style name="tv_m_blue_sl">
+        <item name="android:textSize">@dimen/txt_m</item>
+        <item name="android:textColor">@color/tweet_blue</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="tv_m_grey_sl">
+        <item name="android:textSize">@dimen/txt_m</item>
+        <item name="android:textColor">@color/tweet_grey</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="tv_m_black_sl">
+        <item name="android:textSize">@dimen/txt_m</item>
+        <item name="android:textColor">@color/tweet_black</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="et_grey_hint_black_txt_bg_white">
+        <item name="android:textSize">@dimen/txt_m</item>
+        <item name="android:textColor">@color/tweet_black</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColorHint">@color/tweet_grey</item>
+        <item name="android:background">@color/tweet_white</item>
+    </style>
+
 </resources>
