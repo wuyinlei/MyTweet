@@ -1,7 +1,6 @@
 package com.example.annation.uri;
 
 
-import com.example.annation.utils.PreferenceUtils;
 
 /**
  * Created by ruolan on 2015/12/15.
@@ -24,7 +23,16 @@ public class Contants {
     public static class API {
         public static final String HOME_BASE_URL = "https://api.weibo.com/2/statuses/";
         public static final String PUBLIC_TIMELINE = HOME_BASE_URL + "public_timeline.json";
-        public static final String HOME_TIMELINE = HOME_BASE_URL + "home_timeline.json";
+
+        /**
+         * 首页微博
+         */
+        public static final String HOME_TIME_LINE = HOME_BASE_URL + "home_timeline.json";
+
+        /**
+         * 我的首页微博
+         */
+        public static final String USER_TIME_LINE = HOME_BASE_URL + "user_timeline.json";
     }
 }
 

@@ -1,7 +1,9 @@
 package com.example.annation.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +11,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.annation.R;
+import com.example.annation.status.PicUrlsEntity;
 import com.example.annation.status.StatusEntity;
+import com.example.annation.utils.CircleTransform;
+import com.example.annation.utils.PreferenceUtils;
+import com.example.annation.utils.RichTextUtils;
 import com.example.annation.utils.TimeFormatUtils;
+import com.example.annation.widget.DrawCenterTextView;
 
 import java.util.List;
 
@@ -28,9 +36,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     private List<StatusEntity> mEntities;
     private OnItemClickListener mListener;
 
+    private Context mContext;
 
-    public HomeAdapter(List<StatusEntity> entities) {
+    public HomeAdapter(List<StatusEntity> entities, Context context) {
         mEntities = entities;
+        mContext = context;
     }
 
     @Override
@@ -49,14 +59,61 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     @Override
     public void onBindViewHolder(HomeViewHolder holder, int position) {
         StatusEntity entity = mEntities.get(position);
+        //设置用户名字
         holder.tvUserName.setText(entity.user.screen_name);
+        //设置发表时间
         holder.tvTime.setText(TimeFormatUtils.parseToYYMMDD(entity.created_at));
-        holder.tvContent.setText(entity.text);
+        //设置发表内容
+        //
+        holder.tvContent.setText(RichTextUtils.getRichText(mContext,entity.text));
+        holder.tvContent.setMovementMethod(LinkMovementMethod.getInstance());
+        //holder.tvContent.setText(entity.text);
+        //设置内容来源
         holder.tvSource.setText(Html.fromHtml(entity.source).toString());
+        //加载用户图片
         StatusEntity reStatues = entity.retweeted_status;
+        Glide.with(mContext).load(entity.user.profile_image_url)/*.placeholder(R.mipmap.ic_launcher)*/
+                .transform(new CircleTransform(mContext))
+                .into(holder.ivHeader);
+        List<PicUrlsEntity> pics = entity.pic_urls;
+
+        /**
+         * 设置评论、转发、点赞
+         */
+        holder.tvComment.setText(String.valueOf(entity.comments_count));
+        holder.tvLike.setText(String.valueOf(entity.attitudes_count));
+        holder.tvRetweet.setText(String.valueOf(entity.reposts_count));
+
+        if (null != pics && pics.size() > 0) {
+            //判断是否有头像，如果有头像就显示出来
+            PicUrlsEntity pic = pics.get(0);
+            pic.original_pic = pic.thumbnail_pic.replace("thumbnail", "large");
+            pic.bmiddle_pic = pic.thumbnail_pic.replace("thumbnail", "bmiddle");
+            holder.ivContent.setVisibility(View.VISIBLE);//头像
+            Glide.with(mContext).load(pic.original_pic)
+                    .into(holder.ivContent);
+        } else {
+            holder.ivContent.setVisibility(View.GONE);
+        }
         if (null != reStatues) {
+            String reContent = "@" +reStatues.user.screen_name + ":" + reStatues.text;
+
+            //判断是否有内容图像，如果有，就显示
             holder.tvReContent.setVisibility(View.VISIBLE);
-            holder.tvReContent.setText(reStatues.text);
+           // holder.tvReContent.setText(reStatues.text);
+            holder.tvReContent.setText(RichTextUtils.getRichText(mContext,reContent));
+            holder.tvReContent.setMovementMethod(LinkMovementMethod.getInstance());
+            List<PicUrlsEntity> rePics = reStatues.pic_urls;
+            if (null != rePics && rePics.size() > 0) {
+                PicUrlsEntity pic = rePics.get(0);
+                pic.original_pic = pic.thumbnail_pic.replace("thumbnail", "large");
+                pic.bmiddle_pic = pic.thumbnail_pic.replace("thumbnail", "bmiddle");
+                holder.ivReContent.setVisibility(View.VISIBLE);
+                Glide.with(mContext).load(pic.original_pic)
+                        .into(holder.ivReContent);
+            } else {
+                holder.ivContent.setVisibility(View.GONE);
+            }
         } else {
             holder.tvReContent.setVisibility(View.GONE);
         }
@@ -76,24 +133,34 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
      */
     class HomeViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView ivHeader;
+        private ImageView ivHeader, ivContent, ivReContent;
         private TextView tvUserName;
         private TextView tvTime;
         private TextView tvSource;
         private TextView tvContent;
         private LinearLayout llRe;
         private TextView tvReContent;
+        private DrawCenterTextView tvRetweet,tvLike,tvComment;
 
+
+        /**
+         * 初始化布局控件
+         * @param itemView
+         */
         public HomeViewHolder(View itemView) {
             super(itemView);
             ivHeader = (ImageView) itemView.findViewById(R.id.ivHeader);
+            ivReContent = (ImageView) itemView.findViewById(R.id.ivReContent);
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
             tvSource = (TextView) itemView.findViewById(R.id.tvSource);
             tvContent = (TextView) itemView.findViewById(R.id.tvContent);
             llRe = (LinearLayout) itemView.findViewById(R.id.llRe);
             tvReContent = (TextView) itemView.findViewById(R.id.tvReContent);
-
+            ivContent = (ImageView) itemView.findViewById(R.id.ivContent);
+            tvRetweet = (DrawCenterTextView) itemView.findViewById(R.id.tvRetweet);
+            tvLike = (DrawCenterTextView) itemView.findViewById(R.id.tvLike);
+            tvComment = (DrawCenterTextView) itemView.findViewById(R.id.tvComment);
             //在这里我们调用我们自定义的接口，来实现我们想要的点击效果
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

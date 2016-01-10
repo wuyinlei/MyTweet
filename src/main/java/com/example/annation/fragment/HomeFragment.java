@@ -1,6 +1,12 @@
 package com.example.annation.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,6 +33,8 @@ import com.sina.weibo.sdk.net.WeiboParameters;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by ruolan on 2015/12/15.
@@ -56,10 +64,24 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //第一步、注册eventbus
+        EventBus.getDefault().register(this);
         mParameters = new WeiboParameters(Contants.APP_KEY);
         mPreferenceUtils = PreferenceUtils.getInstance(getActivity());
         mEntities = new ArrayList<>();
-        mHomeAdapter = new HomeAdapter(mEntities);
+        mHomeAdapter = new HomeAdapter(mEntities,getActivity());
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("change");
+
+        /*LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        Log.d("HomeFragment", "onReceive");
+                        loadData(Contants.API.USER_TIME_LINE);
+                    }
+                }, filter);*/
     }
 
     @Override
@@ -138,6 +160,8 @@ public class HomeFragment extends BaseFragment {
                 JsonParser parser = new JsonParser();
                 JsonObject object = parser.parse(s).getAsJsonObject();
                 JsonArray array = object.get("statuses").getAsJsonArray();
+
+
                 List<StatusEntity> list = new ArrayList<StatusEntity>();
                 Type type = new TypeToken<List<StatusEntity>>() {
                 }.getType();
@@ -150,12 +174,20 @@ public class HomeFragment extends BaseFragment {
 
             }
         });*/
-        new BaseNetWork(getActivity(), Contants.API.HOME_TIMELINE) {
+        loadData(Contants.API.HOME_TIME_LINE);
+        return mRecyclerView;
+    }
+
+    /**
+     * 加载数据
+     */
+    private void loadData(String url) {
+        new BaseNetWork(getActivity(), url) {
             @Override
             public WeiboParameters onPrepares() {
                 mParameters.put(ParameterKeySet.AUTH_ACCESS_TOKEN, mPreferenceUtils.getToken().getToken());
                 mParameters.put(ParameterKeySet.PAGE, 1);
-                mParameters.put(ParameterKeySet.COUNT, 10);
+                mParameters.put(ParameterKeySet.COUNT, 100);
                 return mParameters;
             }
 
@@ -177,7 +209,6 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         }.get();
-        return mRecyclerView;
     }
 
     private void initAdapter() {
@@ -192,5 +223,38 @@ public class HomeFragment extends BaseFragment {
                 LogUtils.d(position + "");
             }
         });
+    }
+
+    public void onEventMainThread(Integer event){
+       switch (event){
+           case R.id.first_menu:
+               loadData(Contants.API.HOME_TIME_LINE);
+               break;
+           case R.id.mine_menu:
+               loadData(Contants.API.USER_TIME_LINE);
+               break;
+       }
+    }
+
+   /* *//**
+     * 开启异步线程处理接受消息
+     *//*
+    public void onEventAsync(){}
+
+    *//**
+     * 开启异步线程接受消息
+     *//*
+    public void onEventBackgroundThread(){}
+
+    *//**
+     * 在主线程中接受消息
+     *//*
+    public void onEventMainThread(){}*/
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //反注册一下
+        EventBus.getDefault().unregister(this);
     }
 }

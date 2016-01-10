@@ -3,8 +3,8 @@
     <string name="button">跳转</string>
     <string name="second_activity">第二个Activity</string>
     <string name="action_search">搜索</string>
-    <string name="menu_group_chat">聊天</string>
-    <string name="menu_addfriend">添加</string>
+    <string name="menu_first_page">首页</string>
+    <string name="menu_mine">我的</string>
     <string name="menu_scan">查找</string>
     <string name="menu_feedback">面对面</string>
     <string name="action_add">添加</string>

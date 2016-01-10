@@ -1,7 +1,9 @@
 package com.example.annation.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +16,8 @@ import com.example.annation.R;
 import com.example.annation.fragment.HomeFragment;
 import com.example.annation.fragment.MessageFragment;
 import com.example.annation.fragment.MineFragment;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by ruolan on 2015/12/15.
@@ -40,6 +44,7 @@ public class HomePageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         getmToolbarX().setDisplayHomeAsUpEnabled(false).setTitle(R.string.home);
         fragment = new Class[]{HomeFragment.class, MessageFragment.class, MineFragment.class};
         Log.d("LandingPageActivity", "到这类");
@@ -63,6 +68,11 @@ public class HomePageActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        EventBus.getDefault().post(item.getItemId());
+       /* Intent intent = new Intent();
+        intent.setAction("change");
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);*/
         return true;
     }
 
@@ -70,6 +80,8 @@ public class HomePageActivity extends BaseActivity {
      * 初始化控件
      */
     private void initControl() {
+
+
         flContainer = (FrameLayout) findViewById(R.id.flContainer);
         tabHost = (FragmentTabHost) findViewById(R.id.tabHost);
         rgTab = (RadioGroup) findViewById(R.id.rgTab);
