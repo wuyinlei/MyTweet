@@ -1,7 +1,6 @@
 package com.example.annation.uri;
 
 
-
 /**
  * Created by ruolan on 2015/12/15.
  * 一个懂得了编程乐趣的小白，希望自己
@@ -21,18 +20,26 @@ public class Contants {
                     + "follow_app_official_microblog," + "invitation_write";
 
     public static class API {
-        public static final String HOME_BASE_URL = "https://api.weibo.com/2/statuses/";
+        public static final String HOME_BASE_URL = "https://api.weibo.com/2/";
+
         public static final String PUBLIC_TIMELINE = HOME_BASE_URL + "public_timeline.json";
 
         /**
          * 首页微博
          */
-        public static final String HOME_TIME_LINE = HOME_BASE_URL + "home_timeline.json";
+        public static final String HOME_TIME_LINE = HOME_BASE_URL + "statuses/home_timeline.json";
 
         /**
          * 我的首页微博
          */
-        public static final String USER_TIME_LINE = HOME_BASE_URL + "user_timeline.json";
+        public static final String USER_TIME_LINE = HOME_BASE_URL + "statuses/user_timeline.json";
+
+        /**
+         * 转发微博
+         */
+        public static final String STATUS_REPOST = HOME_BASE_URL + "statuses/repost.json";
+
+        public static final String COMMENT_CREATE = HOME_BASE_URL + "comments/create.json";
     }
 }
 

@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="buttonCornerSize">2.0dip</dimen>
     <integer name="duration_anim">300</integer>
-   <!-- <dimen name="duration_anim">300dp</dimen>-->
+    <!-- <dimen name="duration_anim">300dp</dimen>-->
     <dimen name="space_xs">4dip</dimen>
     <dimen name="space_s">8dip</dimen>
     <dimen name="space_m">16dip</dimen>
@@ -21,7 +21,6 @@
 
     <dimen name="corner_common">4dp</dimen>
     <dimen name="height_divider">1px</dimen>
-
 
 
     <dimen name="avatar_size">48dp</dimen>

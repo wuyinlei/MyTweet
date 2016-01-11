@@ -1,6 +1,7 @@
 package com.example.annation.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -13,8 +14,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.annation.R;
+import com.example.annation.activity.RepostActivity;
 import com.example.annation.status.PicUrlsEntity;
 import com.example.annation.status.StatusEntity;
+import com.example.annation.uri.ParameterKeySet;
 import com.example.annation.utils.CircleTransform;
 import com.example.annation.utils.PreferenceUtils;
 import com.example.annation.utils.RichTextUtils;
@@ -58,7 +61,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
      */
     @Override
     public void onBindViewHolder(HomeViewHolder holder, int position) {
-        StatusEntity entity = mEntities.get(position);
+        final StatusEntity entity = mEntities.get(position);
         //设置用户名字
         holder.tvUserName.setText(entity.user.screen_name);
         //设置发表时间
@@ -83,6 +86,34 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         holder.tvComment.setText(String.valueOf(entity.comments_count));
         holder.tvLike.setText(String.valueOf(entity.attitudes_count));
         holder.tvRetweet.setText(String.valueOf(entity.reposts_count));
+
+        /**
+         * 转发的点击事件
+         */
+        holder.tvRetweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, RepostActivity.class);
+                intent.putExtra(ParameterKeySet.ID, entity.id);
+                intent.putExtra(ParameterKeySet.STATUS, entity.text);
+                intent.setAction("REPOST");
+                mContext.startActivity(intent);
+            }
+        });
+
+
+        /**
+         * 评论的点击事件
+         */
+        holder.tvComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, RepostActivity.class);
+                intent.putExtra(ParameterKeySet.ID, entity.id);
+                intent.setAction("COMMENT");
+                mContext.startActivity(intent);
+            }
+        });
 
         if (null != pics && pics.size() > 0) {
             //判断是否有头像，如果有头像就显示出来

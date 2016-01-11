@@ -60,6 +60,8 @@ public class HomeFragment extends BaseFragment {
 
     private HomeAdapter mHomeAdapter;
 
+    private String url = Contants.API.HOME_TIME_LINE;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,7 @@ public class HomeFragment extends BaseFragment {
         mParameters = new WeiboParameters(Contants.APP_KEY);
         mPreferenceUtils = PreferenceUtils.getInstance(getActivity());
         mEntities = new ArrayList<>();
-        mHomeAdapter = new HomeAdapter(mEntities,getActivity());
+        mHomeAdapter = new HomeAdapter(mEntities, getActivity());
 
         IntentFilter filter = new IntentFilter();
         filter.addAction("change");
@@ -187,16 +189,19 @@ public class HomeFragment extends BaseFragment {
             public WeiboParameters onPrepares() {
                 mParameters.put(ParameterKeySet.AUTH_ACCESS_TOKEN, mPreferenceUtils.getToken().getToken());
                 mParameters.put(ParameterKeySet.PAGE, 1);
-                mParameters.put(ParameterKeySet.COUNT, 100);
+                mParameters.put(ParameterKeySet.COUNT, 20);
                 return mParameters;
             }
 
             @Override
             public void onFinish(HttpResponse response, boolean success) {
                 if (success) {
+                    //用来存放json数据的
                     List<StatusEntity> list = new ArrayList<StatusEntity>();
                     Type type = new TypeToken<List<StatusEntity>>() {
                     }.getType();
+
+                    //解析json数据
                     list = new Gson().fromJson(response.response, type);
                     if (null != list && list.size() > 0) {
                         mEntities.clear();
@@ -211,6 +216,9 @@ public class HomeFragment extends BaseFragment {
         }.get();
     }
 
+    /**
+     * 初始化adapter
+     */
     private void initAdapter() {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -225,15 +233,27 @@ public class HomeFragment extends BaseFragment {
         });
     }
 
-    public void onEventMainThread(Integer event){
-       switch (event){
-           case R.id.first_menu:
-               loadData(Contants.API.HOME_TIME_LINE);
-               break;
-           case R.id.mine_menu:
-               loadData(Contants.API.USER_TIME_LINE);
-               break;
-       }
+    /**
+     * 在这里使用EventBus来传递消息
+     * @param event
+     */
+    public void onEventMainThread(Object event) {
+        if (event instanceof Integer) {
+            //判断类型是integer
+            int id = (int) event;
+            switch (id) {
+                case R.id.first_menu:
+                    url = Contants.API.HOME_TIME_LINE;
+                    break;
+                case R.id.mine_menu:
+                    url = Contants.API.USER_TIME_LINE;
+                    break;
+            }
+            loadData(url);
+            //判断类型是String，在这里处理刷新的功能
+        } else if (event instanceof String) {
+            loadData(url);
+        }
     }
 
    /* *//**
@@ -246,11 +266,12 @@ public class HomeFragment extends BaseFragment {
      *//*
     public void onEventBackgroundThread(){}
 
-    *//**
+    */
+
+    /**
      * 在主线程中接受消息
      *//*
     public void onEventMainThread(){}*/
-
     @Override
     public void onDestroy() {
         super.onDestroy();
