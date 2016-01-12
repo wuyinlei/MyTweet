@@ -14,12 +14,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.annation.R;
+import com.example.annation.activity.PhotoViewActivity;
 import com.example.annation.activity.RepostActivity;
 import com.example.annation.status.PicUrlsEntity;
 import com.example.annation.status.StatusEntity;
 import com.example.annation.uri.ParameterKeySet;
 import com.example.annation.utils.CircleTransform;
-import com.example.annation.utils.PreferenceUtils;
 import com.example.annation.utils.RichTextUtils;
 import com.example.annation.utils.TimeFormatUtils;
 import com.example.annation.widget.DrawCenterTextView;
@@ -117,12 +117,20 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
         if (null != pics && pics.size() > 0) {
             //判断是否有头像，如果有头像就显示出来
-            PicUrlsEntity pic = pics.get(0);
+            final PicUrlsEntity pic = pics.get(0);
             pic.original_pic = pic.thumbnail_pic.replace("thumbnail", "large");
             pic.bmiddle_pic = pic.thumbnail_pic.replace("thumbnail", "bmiddle");
             holder.ivContent.setVisibility(View.VISIBLE);//头像
-            Glide.with(mContext).load(pic.original_pic)
+            Glide.with(mContext).load(pic.bmiddle_pic)
                     .into(holder.ivContent);
+            holder.ivContent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, PhotoViewActivity.class);
+                    intent.putExtra(PicUrlsEntity.class.getSimpleName(),  pic);
+                    mContext.startActivity(intent);
+                }
+            });
         } else {
             holder.ivContent.setVisibility(View.GONE);
         }
@@ -136,12 +144,21 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             holder.tvReContent.setMovementMethod(LinkMovementMethod.getInstance());
             List<PicUrlsEntity> rePics = reStatues.pic_urls;
             if (null != rePics && rePics.size() > 0) {
-                PicUrlsEntity pic = rePics.get(0);
+                final PicUrlsEntity pic = rePics.get(0);
                 pic.original_pic = pic.thumbnail_pic.replace("thumbnail", "large");
                 pic.bmiddle_pic = pic.thumbnail_pic.replace("thumbnail", "bmiddle");
                 holder.ivReContent.setVisibility(View.VISIBLE);
-                Glide.with(mContext).load(pic.original_pic)
+                Glide.with(mContext).load(pic.bmiddle_pic)
                         .into(holder.ivReContent);
+                holder.ivReContent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, PhotoViewActivity.class);
+                        intent.putExtra(PicUrlsEntity.class.getSimpleName(),  pic);
+                        mContext.startActivity(intent);
+                    }
+                });
+
             } else {
                 holder.ivContent.setVisibility(View.GONE);
             }

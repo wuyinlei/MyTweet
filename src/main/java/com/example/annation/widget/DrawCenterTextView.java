@@ -77,4 +77,6 @@ public class DrawCenterTextView extends TextView {
 
         super.onDraw(canvas);
     }
+
+
 }

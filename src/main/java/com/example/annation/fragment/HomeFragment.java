@@ -1,12 +1,9 @@
 package com.example.annation.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.annotation.TargetApi;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,11 +21,12 @@ import com.example.annation.uri.ParameterKeySet;
 import com.example.annation.utils.DividerItemDecoration;
 import com.example.annation.utils.LogUtils;
 import com.example.annation.utils.PreferenceUtils;
+import com.example.annation.widget.PullToRefreshRecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.sina.weibo.sdk.net.AsyncWeiboRunner;
 import com.sina.weibo.sdk.net.WeiboParameters;
-
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -52,7 +50,8 @@ public class HomeFragment extends BaseFragment {
     private AsyncWeiboRunner mAsyncWeiboRunner;
     private PreferenceUtils mPreferenceUtils;
 
-    private RecyclerView mRecyclerView;
+    private PullToRefreshRecyclerView mRecyclerView;
+    //private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.ItemDecoration mItemDecoration;
 
@@ -61,6 +60,8 @@ public class HomeFragment extends BaseFragment {
     private HomeAdapter mHomeAdapter;
 
     private String url = Contants.API.HOME_TIME_LINE;
+
+    private int page = 1;
 
 
     @Override
@@ -88,7 +89,9 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.tweet_commen_recycleview, container, false);
+        /*View view = inflater.inflate(R.layout.item_mytweet_content,container,false);
+        mRecyclerView = (PushToRefreshRecycleView) view.findViewById(R.id.recycle_view);*/
+        mRecyclerView = (PullToRefreshRecyclerView) inflater.inflate(R.layout.tweet_commen_recycleview, container, false);
         initAdapter();
 
         /**
@@ -176,20 +179,22 @@ public class HomeFragment extends BaseFragment {
 
             }
         });*/
-        loadData(Contants.API.HOME_TIME_LINE);
+        loadData(Contants.API.HOME_TIME_LINE,false);
         return mRecyclerView;
     }
 
     /**
      * 加载数据
+     *
+     * 不管是上拉加载更多、下拉刷新、或者是其他方式导致了数据更新，都会调用这个方法的
      */
-    private void loadData(String url) {
+    private void loadData(String url, final boolean loadMore) {
         new BaseNetWork(getActivity(), url) {
             @Override
             public WeiboParameters onPrepares() {
                 mParameters.put(ParameterKeySet.AUTH_ACCESS_TOKEN, mPreferenceUtils.getToken().getToken());
-                mParameters.put(ParameterKeySet.PAGE, 1);
-                mParameters.put(ParameterKeySet.COUNT, 20);
+                mParameters.put(ParameterKeySet.PAGE, page);
+                mParameters.put(ParameterKeySet.COUNT, 5);
                 return mParameters;
             }
 
@@ -203,11 +208,16 @@ public class HomeFragment extends BaseFragment {
 
                     //解析json数据
                     list = new Gson().fromJson(response.response, type);
-                    if (null != list && list.size() > 0) {
+                   /* if (null != list && list.size() > 0) {
                         mEntities.clear();
                         mEntities.addAll(list);
+                    }*/
+                    if (!loadMore){
+                        mEntities.clear();
                     }
+                    mEntities.addAll(list);
                     mHomeAdapter.notifyDataSetChanged();
+                    mRecyclerView.onRefreshComplete();
                     Log.d("HomeFragment", "list.size():" + list.size());
                 } else {
                     Log.d("HomeFragment", "error");
@@ -219,22 +229,56 @@ public class HomeFragment extends BaseFragment {
     /**
      * 初始化adapter
      */
+    @TargetApi(Build.VERSION_CODES.M)
     private void initAdapter() {
         mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.getRefreshableView().setLayoutManager(mLayoutManager);
         mItemDecoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
-        mRecyclerView.addItemDecoration(mItemDecoration);
-        mRecyclerView.setAdapter(mHomeAdapter);
+        mRecyclerView.getRefreshableView().addItemDecoration(mItemDecoration);
+        mRecyclerView.getRefreshableView().setAdapter(mHomeAdapter);
         mHomeAdapter.onItemClickListener(new HomeAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
                 LogUtils.d(position + "");
             }
         });
+        mRecyclerView.setMode(PullToRefreshBase.Mode.BOTH);
+        /**
+         * 上下拉刷新的监听事件
+         */
+        mRecyclerView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<RecyclerView>() {
+
+            /**
+             * 下拉操作
+             * @param refreshView
+             */
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+                page = 1;
+                loadData(url,false);
+            }
+
+            /**
+             * 上拉操作
+             * @param refreshView
+             */
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+                page++;
+                loadData(url,true);
+            }
+        });
+       /* mRecyclerView.getRefreshableView().setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+            }
+        });*/
     }
 
     /**
      * 在这里使用EventBus来传递消息
+     *
      * @param event
      */
     public void onEventMainThread(Object event) {
@@ -249,10 +293,10 @@ public class HomeFragment extends BaseFragment {
                     url = Contants.API.USER_TIME_LINE;
                     break;
             }
-            loadData(url);
+            loadData(url,false);
             //判断类型是String，在这里处理刷新的功能
         } else if (event instanceof String) {
-            loadData(url);
+            loadData(url,false);
         }
     }
 

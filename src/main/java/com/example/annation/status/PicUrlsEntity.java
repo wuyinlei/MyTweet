@@ -1,5 +1,7 @@
 package com.example.annation.status;
 
+import java.io.Serializable;
+
 /**
  * Created by ruolan on 2015/12/16.
  * 一个懂得了编程乐趣的小白，希望自己
@@ -8,7 +10,7 @@ package com.example.annation.status;
  * QQ:1069584784
  * csdn:http://blog.csdn.net/wuyinlei
  */
-public class PicUrlsEntity {
+public class PicUrlsEntity implements Serializable{
 
 
     public String thumbnail_pic;
