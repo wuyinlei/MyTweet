@@ -3,6 +3,8 @@ package com.example.annation.status;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by ruolan on 2015/12/16.
  * 一个懂得了编程乐趣的小白，希望自己
@@ -11,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
  * QQ:1069584784
  * csdn:http://blog.csdn.net/wuyinlei
  */
-public class UserEntity {
+public class UserEntity implements Serializable{
 
     public long id;
     public String idstr;

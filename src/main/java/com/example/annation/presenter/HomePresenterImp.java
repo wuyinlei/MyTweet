@@ -39,6 +39,14 @@ public class HomePresenterImp implements HomePresenter {
 
     private HomeView homeView;
 
+    public List<StatusEntity> getmEntities() {
+        return mEntities;
+    }
+
+    public void setmEntities(List<StatusEntity> mEntities) {
+        this.mEntities = mEntities;
+    }
+
     private HomeAdapter mHomeAdapter;
 
     /**
@@ -50,7 +58,7 @@ public class HomePresenterImp implements HomePresenter {
         this.homeView = homeView;
         mEntities = new ArrayList<>();
         mPreferenceUtils = PreferenceUtils.getInstance(homeView.getActivity());
-        mHomeAdapter = new HomeAdapter(mEntities, homeView.getActivity());
+        //mHomeAdapter = new HomeAdapter(mEntities, homeView.getActivity());
         mParameters = new WeiboParameters(Contants.APP_KEY);
     }
 
@@ -79,10 +87,10 @@ public class HomePresenterImp implements HomePresenter {
         loadData();
     }
 
-    @Override
+   /* @Override
     public HomeAdapter getHomeAdapter() {
         return mHomeAdapter;
-    }
+    }*/
 
     /**
      * 加载数据
@@ -95,13 +103,14 @@ public class HomePresenterImp implements HomePresenter {
             public WeiboParameters onPrepares() {
                 mParameters.put(ParameterKeySet.AUTH_ACCESS_TOKEN, mPreferenceUtils.getToken().getToken());
                 mParameters.put(ParameterKeySet.PAGE, page);
+                //每次加载5条数据
                 mParameters.put(ParameterKeySet.COUNT, 5);
                 return mParameters;
             }
 
             @Override
             public void onFinish(HttpResponse response, boolean success) {
-                homeView.onSuccess();
+
                 if (success) {
                     //用来存放json数据的
                     List<StatusEntity> list = new ArrayList<StatusEntity>();
@@ -118,7 +127,8 @@ public class HomePresenterImp implements HomePresenter {
                         mEntities.clear();
                     }
                     mEntities.addAll(list);
-                    mHomeAdapter.notifyDataSetChanged();
+                    //mHomeAdapter.notifyDataSetChanged();
+                    homeView.onSuccess(mEntities);
                     // Log.d("HomeFragment", "list.size():" + list.size());
                 } else {
                     // Log.d("HomeFragment", "error");

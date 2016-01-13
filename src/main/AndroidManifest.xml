@@ -32,9 +32,13 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.RepostActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".activity.PhotoViewActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.PhotoViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ArticleCommentActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

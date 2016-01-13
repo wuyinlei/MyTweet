@@ -1,5 +1,6 @@
 package com.example.annation.status;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * QQ:1069584784
  * csdn:http://blog.csdn.net/wuyinlei
  */
-public class StatusEntity {
+public class StatusEntity  implements Serializable{
 
 
     /**

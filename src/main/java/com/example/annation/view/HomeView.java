@@ -2,6 +2,10 @@ package com.example.annation.view;
 
 import android.app.Activity;
 
+import com.example.annation.status.StatusEntity;
+
+import java.util.List;
+
 /**
  * Created by 若兰 on 2016/1/13.
  * 一个懂得了编程乐趣的小白，希望自己
@@ -18,7 +22,7 @@ public interface HomeView {
     /**
      * 请求成功的时候
      */
-    void onSuccess();
+    void onSuccess(List<StatusEntity> list);
 
     /**
      * 请求失败的时候

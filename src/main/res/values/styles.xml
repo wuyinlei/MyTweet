@@ -67,4 +67,10 @@
         <item name="android:background">@color/tweet_white</item>
     </style>
 
+    <style name="tv_s_grey_sl">
+        <item name="android:textSize">@dimen/txt_s</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
 </resources>

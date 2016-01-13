@@ -41,6 +41,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     private Context mContext;
 
+
     public HomeAdapter(List<StatusEntity> entities, Context context) {
         mEntities = entities;
         mContext = context;
@@ -167,7 +168,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         }
     }
 
-    public void onItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
     }
 
@@ -230,7 +231,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
      * 想要的效果
      */
     public interface OnItemClickListener {
-        public void onItemClickListener(View v, int position);
+         void onItemClickListener(View v, int position);
     }
 
 

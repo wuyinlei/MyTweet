@@ -1,6 +1,7 @@
 package com.example.annation.fragment;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,12 +13,18 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.annation.R;
+import com.example.annation.activity.ArticleCommentActivity;
+import com.example.annation.adapter.HomeAdapter;
 import com.example.annation.presenter.HomePresenter;
 import com.example.annation.presenter.HomePresenterImp;
+import com.example.annation.status.StatusEntity;
 import com.example.annation.utils.DividerItemDecoration;
 import com.example.annation.view.HomeView;
 import com.example.annation.widget.PullToRefreshRecyclerView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
@@ -39,6 +46,9 @@ public class HomeFragment extends BaseFragment implements HomeView{
     //private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.ItemDecoration mItemDecoration;
+    private List<StatusEntity> mEntities;
+
+    private HomeAdapter homeAdapter;
 
 
     private HomePresenter mPresenter;
@@ -53,6 +63,8 @@ public class HomeFragment extends BaseFragment implements HomeView{
         //第一步、注册eventbus
         EventBus.getDefault().register(this);
         mPresenter = new HomePresenterImp(this);
+        mEntities = new ArrayList<>();
+        homeAdapter = new HomeAdapter(mEntities,getActivity());
 
         IntentFilter filter = new IntentFilter();
         filter.addAction("change");
@@ -88,13 +100,19 @@ public class HomeFragment extends BaseFragment implements HomeView{
         mRecyclerView.getRefreshableView().setLayoutManager(mLayoutManager);
         mItemDecoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
         mRecyclerView.getRefreshableView().addItemDecoration(mItemDecoration);
-        mRecyclerView.getRefreshableView().setAdapter(mPresenter.getHomeAdapter());
+        mRecyclerView.getRefreshableView().setAdapter(homeAdapter);
        /* mHomeAdapter.onItemClickListener(new HomeAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
                 LogUtils.d(position + "");
             }
         });*/
+
+        /**
+         * BOTH(0x3)
+         *
+         * Allow the user to both Pull from the start, from the end to refresh.
+         */
         mRecyclerView.setMode(PullToRefreshBase.Mode.BOTH);
         /**
          * 上下拉刷新的监听事件
@@ -117,6 +135,16 @@ public class HomeFragment extends BaseFragment implements HomeView{
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
                mPresenter.loadMore();
+            }
+        });
+
+        homeAdapter.setOnItemClickListener(new HomeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(View v, int position) {
+                Intent intent = new Intent(getActivity(), ArticleCommentActivity.class);
+                intent.putExtra(StatusEntity.class.getSimpleName(),mEntities.get(position));
+                getActivity().startActivity(intent);
+                Toast.makeText(getActivity(), "到这了", Toast.LENGTH_SHORT).show();
             }
         });
        /* mRecyclerView.getRefreshableView().setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -145,7 +173,6 @@ public class HomeFragment extends BaseFragment implements HomeView{
                     break;
             }
             //判断类型是String，在这里处理刷新的功能
-        } else if (event instanceof String) {
         }
     }
 
@@ -172,9 +199,14 @@ public class HomeFragment extends BaseFragment implements HomeView{
         EventBus.getDefault().unregister(this);
     }
 
+
     @Override
-    public void onSuccess() {
+    public void onSuccess(List<StatusEntity> list) {
         mRecyclerView.onRefreshComplete();
+        mEntities.clear();
+        mEntities.addAll(list);
+        homeAdapter.notifyDataSetChanged();
+
     }
 
     @Override

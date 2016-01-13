@@ -39,7 +39,15 @@ public class Contants {
          */
         public static final String STATUS_REPOST = HOME_BASE_URL + "statuses/repost.json";
 
+        /**
+         * 评论
+         */
         public static final String COMMENT_CREATE = HOME_BASE_URL + "comments/create.json";
+
+        /**
+         * 数据展示
+         */
+        public static final String COMMENT_SHOW = HOME_BASE_URL + "comments/show.json";
     }
 }
 

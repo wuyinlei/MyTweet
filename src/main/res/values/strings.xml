@@ -25,4 +25,5 @@
     <string name="hint_please_input_content">请输入文本内容</string>
     <string name="lbl_post">发送</string>
     <string name="lbl_comment">评论</string>
+    <string name="article_comment_title">微博正文</string>
 </resources>

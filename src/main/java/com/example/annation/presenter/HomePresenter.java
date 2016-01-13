@@ -1,7 +1,5 @@
 package com.example.annation.presenter;
 
-import com.example.annation.adapter.HomeAdapter;
-
 /**
  * Created by 若兰 on 2016/1/13.
  * 一个懂得了编程乐趣的小白，希望自己
@@ -33,6 +31,6 @@ public interface HomePresenter {
      */
     void requestUserTimeLine();
 
-    HomeAdapter getHomeAdapter();
-
+   /* HomeAdapter getHomeAdapter();
+*/
 }
