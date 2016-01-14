@@ -21,5 +21,14 @@ public interface BaseView {
      */
     void onError(String error);
 
+    /**
+     * 展示等待对话框
+     */
+    void showLoading();
+
+    /**
+     * 隐藏等待对话框
+     */
+    void hideLoading();
 
 }

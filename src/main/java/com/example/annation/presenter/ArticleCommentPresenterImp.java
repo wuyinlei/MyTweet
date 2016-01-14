@@ -39,10 +39,10 @@ public class ArticleCommentPresenterImp implements ArticleCommentPresenter {
     private int page = 1;
 
 
-    public ArticleCommentPresenterImp( ArticleCommentView commentView) {
+    public ArticleCommentPresenterImp(ArticleCommentView commentView) {
         this.commentView = commentView;
         mPres = PreferenceUtils.getInstance(commentView.getActivity().getApplicationContext());
-      mDataSet = new ArrayList<>();
+        mDataSet = new ArrayList<>();
     }
 
     @Override
@@ -53,28 +53,27 @@ public class ArticleCommentPresenterImp implements ArticleCommentPresenter {
     }
 
     @Override
-    public void loadData() {
-
+    public void loadData(boolean showLoading) {
         page = 1;
-        loadData(false);
+        loadData(false, showLoading);
     }
 
     @Override
-    public void loadMore() {
-        page ++;
-        loadData(true);
+    public void loadMore(boolean showLoading) {
+        page++;
+        loadData(true, showLoading);
     }
 
-    private void loadData(final boolean loadMore) {
+    private void loadData(final boolean loadMore, boolean showLoading) {
 
-        new BaseNetWork(commentView.getActivity(), Contants.API.COMMENT_SHOW) {
+        new BaseNetWork(commentView, Contants.API.COMMENT_SHOW, showLoading) {
             @Override
             public WeiboParameters onPrepares() {
                 WeiboParameters parameters = new WeiboParameters(Contants.APP_KEY);
-                parameters.put(ParameterKeySet.ID,getEntity().id);
-                parameters.put(ParameterKeySet.PAGE,1);
-                parameters.put(ParameterKeySet.COUNT,10);
-                parameters.put(ParameterKeySet.AUTH_ACCESS_TOKEN,mPres.getToken().getToken());
+                parameters.put(ParameterKeySet.ID, getEntity().id);
+                parameters.put(ParameterKeySet.PAGE, 1);
+                parameters.put(ParameterKeySet.COUNT, 10);
+                parameters.put(ParameterKeySet.AUTH_ACCESS_TOKEN, mPres.getToken().getToken());
 
                 return parameters;
             }
@@ -83,12 +82,13 @@ public class ArticleCommentPresenterImp implements ArticleCommentPresenter {
             public void onFinish(HttpResponse response, boolean success) {
                 if (success) {
                     Log.d("ArticleCommentActivity", "response:" + response.response);
-                    Type type = new TypeToken<ArrayList<CommentEntity>>(){}.getType();
+                    Type type = new TypeToken<ArrayList<CommentEntity>>() {
+                    }.getType();
                     JsonParser parser = new JsonParser();
                     JsonElement element = parser.parse(response.response);
-                    if (element.isJsonArray()){
-                        List<CommentEntity> list = new Gson().fromJson(element,type);
-                        if (!loadMore){
+                    if (element.isJsonArray()) {
+                        List<CommentEntity> list = new Gson().fromJson(element, type);
+                        if (!loadMore) {
                             mDataSet.clear();
                         }
                         mDataSet.addAll(list);

@@ -65,28 +65,28 @@ public class HomePresenterImp implements HomePresenter {
     }
 
     @Override
-    public void loadData() {
+    public void loadData(boolean showLoading) {
         page = 1;
-        loadData(false);
+        loadData(false,showLoading);
     }
 
     @Override
-    public void loadMore() {
+    public void loadMore(boolean showLoading) {
         page++;
-        loadData(true);
+        loadData(true,showLoading);
 
     }
 
     @Override
     public void requestHomeTimeLine() {
         url = Contants.API.HOME_TIME_LINE;
-        loadData();
+        loadData(true);
     }
 
     @Override
     public void requestUserTimeLine() {
         url = Contants.API.USER_TIME_LINE;
-        loadData();
+        loadData(true);
     }
 
    /* @Override
@@ -99,8 +99,8 @@ public class HomePresenterImp implements HomePresenter {
      * <p/>
      * 不管是上拉加载更多、下拉刷新、或者是其他方式导致了数据更新，都会调用这个方法的
      */
-    private void loadData(final boolean loadMore) {
-        new BaseNetWork(homeView.getActivity(), url) {
+    private void loadData(final boolean loadMore,boolean showLoading) {
+        new BaseNetWork(homeView, url) {
             @Override
             public WeiboParameters onPrepares() {
                 mParameters.put(ParameterKeySet.AUTH_ACCESS_TOKEN, mPreferenceUtils.getToken().getToken());

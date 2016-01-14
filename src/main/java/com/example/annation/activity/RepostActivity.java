@@ -101,7 +101,7 @@ public class RepostActivity extends BaseActivity {
      * @param string
      */
     private void postRepost(final String string) {
-        new BaseNetWork(getApplicationContext(), url) {
+        new BaseNetWork(this, url) {
             @Override
             public WeiboParameters onPrepares() {
                 WeiboParameters weiboParameters = new WeiboParameters(Contants.APP_KEY);

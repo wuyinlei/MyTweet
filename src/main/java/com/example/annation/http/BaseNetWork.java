@@ -1,7 +1,6 @@
 package com.example.annation.http;
 
-import android.content.Context;
-
+import com.example.annation.view.BaseView;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -23,15 +22,29 @@ public abstract class BaseNetWork {
 
     private AsyncWeiboRunner mAsyncWeiboRunner;
     private String url;
+    private BaseView mBaseView;
+    private boolean mShowLoading;
 
-    public BaseNetWork(Context context, String url) {
-        mAsyncWeiboRunner = new AsyncWeiboRunner(context);
+    public BaseNetWork(BaseView baseView, String url) {
+        this.mBaseView = baseView;
+        mAsyncWeiboRunner = new AsyncWeiboRunner(mBaseView.getActivity());
         this.url = url;
+    }
+
+    public BaseNetWork(BaseView baseView, String url,boolean showLoading) {
+        this.mBaseView = baseView;
+        mAsyncWeiboRunner = new AsyncWeiboRunner(mBaseView.getActivity());
+        this.url = url;
+        this.mShowLoading = showLoading;
     }
 
     private RequestListener mRequestListener = new RequestListener() {
         @Override
         public void onComplete(String s) {
+
+            if (mShowLoading) {
+                mBaseView.hideLoading();
+            }
             /* {
                 "request" : "/statuses/home_timeline.json",
                     "error_code" : "20502",
@@ -48,6 +61,9 @@ public abstract class BaseNetWork {
                 }
                 if (object.has("error")) {
                     response.message = object.get("error").getAsString();
+                    mBaseView.onError(response.message);
+                    onFinish(response, false);
+                    return;
                 }
                 if (object.has("statuses")) {
                     response.response = object.get("statuses").toString();
@@ -69,24 +85,35 @@ public abstract class BaseNetWork {
 
         @Override
         public void onWeiboException(WeiboException e) {
+
+            if (mShowLoading) {
+                mBaseView.hideLoading();
+            }
             HttpResponse response = new HttpResponse();
             response.message = e.getMessage();
+            mBaseView.onError(response.message);
             onFinish(response, false);
         }
     };
 
 
     public void get() {
-        mAsyncWeiboRunner.requestAsync(url, onPrepares(), "GET", mRequestListener);
+        request("GET");
     }
 
     public void post() {
-        mAsyncWeiboRunner.requestAsync(url, onPrepares(), "POST", mRequestListener);
-
+        request("POST");
     }
 
     public void delete() {
-        mAsyncWeiboRunner.requestAsync(url, onPrepares(), "DELETE", mRequestListener);
+        request("DELETE");
+    }
+
+    private void request(String method) {
+        if (mShowLoading) {
+            mBaseView.showLoading();
+        }
+        mAsyncWeiboRunner.requestAsync(url, onPrepares(), method, mRequestListener);
     }
 
     public abstract WeiboParameters onPrepares();

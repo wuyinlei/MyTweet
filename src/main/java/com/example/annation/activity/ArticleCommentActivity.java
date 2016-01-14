@@ -1,10 +1,8 @@
 package com.example.annation.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
 import com.example.annation.R;
 import com.example.annation.adapter.ArticleCommentAdapter;
@@ -36,9 +34,20 @@ public class ArticleCommentActivity extends BaseActivity implements ArticleComme
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.ItemDecoration mItemDecoration;
 
+
+    /**
+     * 适配器
+     */
     private ArticleCommentAdapter articleCommentAdapter;
+
+    /**
+     * 评论数据
+     */
     private List<CommentEntity> mDataSet;
 
+    /**
+     * Presenter
+     */
     private ArticleCommentPresenter commentPresenter;
 
 
@@ -63,52 +72,80 @@ public class ArticleCommentActivity extends BaseActivity implements ArticleComme
     private void initialize() {
 
         recycleview = (PullToRefreshRecyclerView) findViewById(R.id.recycle_view);
+        initData();
+
+
+
+    }
+
+    /**
+     * 初始化数据和设置recycleview相关
+     */
+    private void initData() {
         mLayoutManager = new LinearLayoutManager(this);
         recycleview.setLayoutManager(mLayoutManager);
         mItemDecoration = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
 
         recycleview.addItemDecotation(mItemDecoration);
 
+        /**
+         * 初始化适配器
+         */
         articleCommentAdapter = new ArticleCommentAdapter(this,mEntities,mDataSet);
+
+        /**
+         * 设置适配器
+         */
         recycleview.setAdapter(articleCommentAdapter);
 
 
+        /**
+         * 设置上下拉true，这样设置后可以响应上下拉的举动
+         */
         recycleview.setMode(PullToRefreshBase.Mode.BOTH);
-        commentPresenter.loadData();
+
+        /**
+         * 通过Presenter加载数据
+         */
+        commentPresenter.loadData(true);
+
+        /**
+         * 设置上拉和下拉监听器
+         */
         recycleview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<RecyclerView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
-                commentPresenter.loadData();
+                commentPresenter.loadData(false);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
-                commentPresenter.loadMore();
+                commentPresenter.loadMore(false);
             }
         });
-
-
-
     }
 
 
-    @Override
-    public Activity getActivity() {
-        return this;
-    }
-
-    @Override
-    public void onError(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public void onSuccess(List<CommentEntity> list) {
+        /**
+         * 完成加载后调用
+         */
         recycleview.onRefreshComplete();
         if (null != list && list.size() > 0){
             mDataSet.clear();
             mDataSet.addAll(list);
             articleCommentAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onError(String error) {
+        super.onError(error);
+        /**
+         * 在请求失败的时候也要调用这方法，要不然就会一直处于加载状态
+         */
+        recycleview.onRefreshComplete();
     }
 }

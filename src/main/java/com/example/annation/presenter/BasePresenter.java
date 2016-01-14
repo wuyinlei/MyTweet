@@ -13,12 +13,12 @@ public interface BasePresenter {
     /**
      * 加载数据
      */
-    void loadData();
+    void loadData(boolean showLoading);
 
     /**
      * 加载更多数据
      */
-    void loadMore();
+    void loadMore(boolean showLoading);
 
 
 }

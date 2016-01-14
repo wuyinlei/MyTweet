@@ -26,4 +26,5 @@
     <string name="lbl_post">发送</string>
     <string name="lbl_comment">评论</string>
     <string name="article_comment_title">微博正文</string>
+    <string name="loading_layout">加载中</string>
 </resources>

@@ -85,7 +85,7 @@ public class HomeFragment extends BaseFragment implements HomeView{
         mRecyclerView = (PushToRefreshRecycleView) view.findViewById(R.id.recycle_view);*/
         mRecyclerView = (PullToRefreshRecyclerView) inflater.inflate(R.layout.tweet_commen_recycleview, container, false);
         initAdapter();
-        mPresenter.loadData();
+        mPresenter.loadData(true);
 
 
         return mRecyclerView;
@@ -125,7 +125,7 @@ public class HomeFragment extends BaseFragment implements HomeView{
              */
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
-                mPresenter.loadData();
+                mPresenter.loadData(false);
             }
 
             /**
@@ -134,7 +134,7 @@ public class HomeFragment extends BaseFragment implements HomeView{
              */
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
-               mPresenter.loadMore();
+               mPresenter.loadMore(false);
             }
         });
 
@@ -175,7 +175,7 @@ public class HomeFragment extends BaseFragment implements HomeView{
             //判断类型是String，在这里处理刷新的功能
         }
         if (event instanceof String){
-            mPresenter.loadData();
+            mPresenter.loadData(false);
         }
     }
 
@@ -219,5 +219,15 @@ public class HomeFragment extends BaseFragment implements HomeView{
          */
         mRecyclerView.onRefreshComplete();
         Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
     }
 }
