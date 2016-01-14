@@ -174,6 +174,9 @@ public class HomeFragment extends BaseFragment implements HomeView{
             }
             //判断类型是String，在这里处理刷新的功能
         }
+        if (event instanceof String){
+            mPresenter.loadData();
+        }
     }
 
    /* *//**

@@ -55,7 +55,7 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private StatusEntity mStatusEntity;
 
-    public ArticleCommentAdapter( Context mContext, StatusEntity mStatusEntity,List<CommentEntity> list) {
+    public ArticleCommentAdapter(Context mContext, StatusEntity mStatusEntity, List<CommentEntity> list) {
         this.mContext = mContext;
         this.mStatusEntity = mStatusEntity;
         mList = list;
@@ -75,8 +75,8 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter {
         /**
          * 判断是否是头部，也就是原文
          */
-        if (viewType == VIEW_TYPE_HEADER){
-            view = layoutInflater.inflate(R.layout.item_mytweet_content,parent,false);
+        if (viewType == VIEW_TYPE_HEADER) {
+            view = layoutInflater.inflate(R.layout.item_mytweet_content, parent, false);
             viewHolder = new HomeViewHolder(view);
         } else {
             //否则的话，就是评论
@@ -200,9 +200,9 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter {
         /**
          * 判断当前的holder的类型是否是CommonViewHolder类型，如果是的话，就加载评论人的信息和评论的内容
          */
-        if(holder instanceof CommonViewHolder){
+        if (holder instanceof CommonViewHolder) {
             CommonViewHolder commonViewHolder = (CommonViewHolder) holder;
-            CommentEntity  commentEntity = mList.get(position-1);
+            CommentEntity commentEntity = mList.get(position - 1);
             Glide.with(mContext).load(commentEntity.user.profile_image_url).into(commonViewHolder.ivHeader);
             commonViewHolder.tvComment.setText(commentEntity.text);
             commonViewHolder.tvUserName.setText(commentEntity.user.screen_name);
@@ -215,17 +215,17 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return mList.size() + 1;
     }
-
+/*
     class ArticleCommentViewHolder extends RecyclerView.ViewHolder {
 
         public ArticleCommentViewHolder(View itemView) {
             super(itemView);
         }
-    }
+    }*/
 
     @Override
     public int getItemViewType(int position) {
-        return isHeader(position)? VIEW_TYPE_HEADER:VIEW_TYPE_ITEM;
+        return isHeader(position) ? VIEW_TYPE_HEADER : VIEW_TYPE_ITEM;
     }
 
     private boolean isHeader(int position) {
@@ -244,11 +244,12 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter {
         private TextView tvContent;
         private LinearLayout llRe;
         private TextView tvReContent;
-        private DrawCenterTextView tvRetweet,tvLike,tvComment;
+        private DrawCenterTextView tvRetweet, tvLike, tvComment;
 
 
         /**
          * 初始化布局控件
+         *
          * @param itemView
          */
         public HomeViewHolder(View itemView) {

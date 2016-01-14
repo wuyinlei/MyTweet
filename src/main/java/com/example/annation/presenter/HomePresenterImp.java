@@ -1,5 +1,7 @@
 package com.example.annation.presenter;
 
+import android.util.Log;
+
 import com.example.annation.adapter.HomeAdapter;
 import com.example.annation.http.BaseNetWork;
 import com.example.annation.http.HttpResponse;
@@ -131,7 +133,7 @@ public class HomePresenterImp implements HomePresenter {
                     homeView.onSuccess(mEntities);
                     // Log.d("HomeFragment", "list.size():" + list.size());
                 } else {
-                    // Log.d("HomeFragment", "error");
+                     Log.d("HomeFragment", "error");
                 }
             }
         }.get();
