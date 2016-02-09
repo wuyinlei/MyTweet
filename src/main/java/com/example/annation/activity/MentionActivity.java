@@ -17,7 +17,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MentionActivity extends BaseActivity implements HomeView{
+public class MentionActivity extends BaseActivity implements HomeView {
 
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.ItemDecoration mItemDecoration;
@@ -45,21 +45,21 @@ public class MentionActivity extends BaseActivity implements HomeView{
         mLayoutManager = new LinearLayoutManager(this);
         rlv.setLayoutManager(mLayoutManager);
         mStatusEntities = new ArrayList<>();
-        mItemDecoration = new DividerItemDecoration(this,LinearLayoutManager.VERTICAL);
+        mItemDecoration = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
         rlv.addItemDecotation(mItemDecoration);
 
         rlv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<RecyclerView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
-
+                mBasePresenter.loadData(false);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
-
+                mBasePresenter.loadMore(false);
             }
         });
-        mMentionAdapter = new MentionAdapter(mStatusEntities,this);
+        mMentionAdapter = new MentionAdapter(mStatusEntities, this);
         rlv.setAdapter(mMentionAdapter);
         mBasePresenter = new MentionPresenterImp(this);
         mBasePresenter.loadData(true);
@@ -70,7 +70,7 @@ public class MentionActivity extends BaseActivity implements HomeView{
     @Override
     public void onSuccess(List<StatusEntity> list) {
         rlv.onRefreshComplete();
-        if (list != null && list.size() > 0){
+        if (list != null && list.size() > 0) {
             mStatusEntities.clear();
             mStatusEntities.addAll(list);
             mMentionAdapter.notifyDataSetChanged();

@@ -19,4 +19,5 @@ public class CommentEntity {
     public String mid;
     public String idStr;
     public CommentEntity reply_comment;
+    public StatusEntity status;
 }
