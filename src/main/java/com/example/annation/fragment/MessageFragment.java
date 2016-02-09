@@ -8,105 +8,61 @@ package com.example.annation.fragment;
  * csdn:http://blog.csdn.net/wuyinlei
  */
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.annation.R;
-import com.example.annation.utils.LogUtils;
+import com.example.annation.activity.CommentActivity;
+import com.example.annation.activity.LikedActivity;
+import com.example.annation.activity.MentionActivity;
 
 
-public class MessageFragment extends BaseFragment {
+public class MessageFragment extends BaseFragment implements View.OnClickListener {
 
-    private View mView;
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        LogUtils.d("onAttach");
-    }
+    private LinearLayout llAt;
+    private LinearLayout llComments;
+    private LinearLayout llLike;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogUtils.d("onCreate");
     }
 
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (mView == null) {
-            mView = inflater.inflate(R.layout.fragment_message, container, false);
-            LogUtils.d("第一次");
+        View view = inflater.inflate(R.layout.fragment_message, container, false);
+        initialize(view);
+
+        return view;
+    }
+
+    private void initialize(View view) {
+
+        llAt = (LinearLayout) view.findViewById(R.id.llAt);
+        llComments = (LinearLayout) view.findViewById(R.id.llComments);
+        llLike = (LinearLayout) view.findViewById(R.id.llLike);
+        llAt.setOnClickListener(this);
+        llComments.setOnClickListener(this);
+        llLike.setOnClickListener(this);
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.llAt:
+                startActivity(new Intent(getContext(), MentionActivity.class));
+                break;
+            case R.id.llComments:
+                startActivity(new Intent(getContext(), CommentActivity.class));
+                break;
+            case R.id.llLike:
+                startActivity(new Intent(getContext(), LikedActivity.class));
+                break;
         }
-       /* ViewGroup group = (ViewGroup) mView.getParent();
-        if (group != null){
-            group.removeView(mView);
-        }*/
-        LogUtils.d("onCreateView");
-        return mView;
     }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        LogUtils.d("onActivityCreated");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        LogUtils.d("onStart");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        LogUtils.d("onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        LogUtils.d("onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        LogUtils.d("onStop");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        LogUtils.d("onDestroyView");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        LogUtils.d("onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        LogUtils.d("onDetach");
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        LogUtils.d("onAttach");
-    }
-
-    @Override
-    public void startActivity(Intent intent) {
-        super.startActivity(intent);
-        LogUtils.d("startActivity");
-    }
-
 }

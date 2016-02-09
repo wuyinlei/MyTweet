@@ -48,6 +48,26 @@ public class Contants {
          * 数据展示
          */
         public static final String COMMENT_SHOW = HOME_BASE_URL + "comments/show.json";
+
+        /**
+         * 评论微博
+         */
+        public static final String MENTIONS =HOME_BASE_URL+"statuses/mentions.json";
+
+        /**
+         *
+         */
+        public static final String COMMENTS_BY_ME =HOME_BASE_URL+"comments/by_me.json";
+
+        /**
+         * 热爱微博
+         */
+        public static final String FAVOURITES =HOME_BASE_URL+"favorites.json";
+
+        /**
+         * 用户信息
+         */
+        public static final String USER_INFO =HOME_BASE_URL+"users/show.json";
     }
 }
 
