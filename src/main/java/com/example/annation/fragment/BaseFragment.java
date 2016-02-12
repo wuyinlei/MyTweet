@@ -12,9 +12,10 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 
 import com.example.annation.R;
+import com.example.annation.view.BaseView;
 
 
-public class BaseFragment extends Fragment {
+public class BaseFragment extends Fragment implements BaseView {
 
     @Override
     public void startActivity(Intent intent) {
@@ -28,4 +29,18 @@ public class BaseFragment extends Fragment {
         getActivity().overridePendingTransition(R.anim.anmi_in_right_left, R.anim.anmi_out_right_left);
     }
 
+    @Override
+    public void onError(String error) {
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
 }

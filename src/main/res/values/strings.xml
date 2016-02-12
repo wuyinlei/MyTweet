@@ -30,4 +30,6 @@
     <string name="at_me">\@我的</string>
     <string name="lbl_my_attention">评论微博</string>
     <string name="lbl_like">我的收藏</string>
+    <string name="lbl_my_fans">我的粉丝</string>
+    <string name="lbl_logout">退出登录</string>
 </resources>
