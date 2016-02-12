@@ -52,22 +52,22 @@ public class Contants {
         /**
          * 评论微博
          */
-        public static final String MENTIONS =HOME_BASE_URL+"statuses/mentions.json";
+        public static final String MENTIONS = HOME_BASE_URL + "statuses/mentions.json";
 
         /**
-         *
+         * 我的评论
          */
-        public static final String COMMENTS_BY_ME =HOME_BASE_URL+"comments/by_me.json";
+        public static final String COMMENTS_BY_ME = HOME_BASE_URL + "comments/by_me.json";
 
         /**
-         * 热爱微博
+         * 收藏微博
          */
-        public static final String FAVOURITES =HOME_BASE_URL+"favorites.json";
+        public static final String FAVOURITES = HOME_BASE_URL + "favorites.json";
 
         /**
          * 用户信息
          */
-        public static final String USER_INFO =HOME_BASE_URL+"users/show.json";
+        public static final String USER_INFO = HOME_BASE_URL + "users/show.json";
     }
 }
 

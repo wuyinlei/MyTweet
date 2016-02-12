@@ -74,7 +74,11 @@ public abstract class BaseNetWork {
                 } else if (object.has("comments")) {
                     response.response = object.get("comments").toString();
                     success = true;
-                } else {
+                } else if (object.has("favorites")){
+                    response.response = object.get("favorites").toString();
+                    success = true;
+                }
+                else {
                     response.response = s;
                     success = true;
                 }

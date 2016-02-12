@@ -2,7 +2,6 @@ package com.example.annation.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -45,7 +44,7 @@ public class HomePageActivity extends BaseActivity {
 
         getmToolbarX().setDisplayHomeAsUpEnabled(false).setTitle(R.string.home);
         fragment = new Class[]{HomeFragment.class, MessageFragment.class, MineFragment.class};
-        Log.d("LandingPageActivity", "到这类");
+        //Log.d("LandingPageActivity", "到这类");
         initControl();
     }
 

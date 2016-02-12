@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 
 import com.example.annation.R;
 import com.example.annation.activity.CommentActivity;
-import com.example.annation.activity.LikedActivity;
+import com.example.annation.activity.FavActivity;
 import com.example.annation.activity.MentionActivity;
 
 
@@ -61,7 +61,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 startActivity(new Intent(getContext(), CommentActivity.class));
                 break;
             case R.id.llLike:
-                startActivity(new Intent(getContext(), LikedActivity.class));
+                startActivity(new Intent(getContext(), FavActivity.class));
                 break;
         }
     }

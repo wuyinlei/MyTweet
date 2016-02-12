@@ -31,6 +31,8 @@ public class MentionActivity extends BaseActivity implements HomeView {
         super.onCreate(savedInstanceState);
         getmToolbarX().setTitle(R.string.at_me);
         initialize();
+        initController();
+        initData();
     }
 
     @Override
@@ -38,16 +40,18 @@ public class MentionActivity extends BaseActivity implements HomeView {
         return R.layout.activity_mention;
     }
 
+    /**
+     * 初始化控件
+     */
     private void initialize() {
 
         rlv = (PullToRefreshRecyclerView) findViewById(R.id.rlv);
-        rlv.setMode(PullToRefreshBase.Mode.BOTH);
-        mLayoutManager = new LinearLayoutManager(this);
-        rlv.setLayoutManager(mLayoutManager);
-        mStatusEntities = new ArrayList<>();
-        mItemDecoration = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
-        rlv.addItemDecotation(mItemDecoration);
+    }
 
+    /**
+     * 数据加载
+     */
+    private void initData() {
         rlv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<RecyclerView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
@@ -63,8 +67,18 @@ public class MentionActivity extends BaseActivity implements HomeView {
         rlv.setAdapter(mMentionAdapter);
         mBasePresenter = new MentionPresenterImp(this);
         mBasePresenter.loadData(true);
+    }
 
-
+    /**
+     * 初始化recycleview的各种设置
+     */
+    private void initController() {
+        rlv.setMode(PullToRefreshBase.Mode.BOTH);
+        mLayoutManager = new LinearLayoutManager(this);
+        rlv.setLayoutManager(mLayoutManager);
+        mStatusEntities = new ArrayList<>();
+        mItemDecoration = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
+        rlv.addItemDecotation(mItemDecoration);
     }
 
     @Override

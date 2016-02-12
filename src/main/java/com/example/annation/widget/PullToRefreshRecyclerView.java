@@ -17,57 +17,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
  */
 
 public class PullToRefreshRecyclerView extends PullToRefreshBase<RecyclerView> {
-/*
-    public PullToRefreshRecyclerView(Context context) {
-        super(context);
-    }
-
-    public PullToRefreshRecyclerView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public PullToRefreshRecyclerView(Context context, Mode mode) {
-        super(context, mode);
-    }
-
-    public PullToRefreshRecyclerView(Context context, Mode mode, AnimationStyle animStyle) {
-        super(context, mode, animStyle);
-    }
-
-
-    @Override
-    public Orientation getPullToRefreshScrollDirection() {
-        return Orientation.VERTICAL;
-    }
-
-    @Override
-    protected RecyclerView createRefreshableView(Context context, AttributeSet attrs) {
-        RecyclerView recyclerView = new RecyclerView(context, attrs);
-        recyclerView.setId(com.handmark.pulltorefresh.library.R.id.recyclerview);
-        return recyclerView;
-    }
-
-    @Override
-    protected boolean isReadyForPullEnd() {
-        Log.d("PushToRefreshRecycleVie", "isReadyForPullEnd():" + isReadyForPullEnd());
-        return false;
-    }
-
-    @Override
-    protected boolean isReadyForPullStart() {
-      *//*  LogUtils.d("isReadyForPullStart");
-        //如果我们的这个没有孩子了，就让他刷新
-        if (mRefreshableView.getChildCount() == 0) {
-            return true;
-        }
-
-        View view = mRefreshableView.getChildAt(0);
-        int position = mRefreshableView.getChildLayoutPosition(view);
-        if (position == 0) {
-            return view.getTop() == mRefreshableView.getTop();
-        }*//*
-        return false;
-    }*/
 
     public PullToRefreshRecyclerView(Context context) {
         super(context);
@@ -97,10 +46,11 @@ public class PullToRefreshRecyclerView extends PullToRefreshBase<RecyclerView> {
 
     /**
      * 这个是上拉加载的实现逻辑
+     *
      * @return
      */
     protected boolean isReadyForPullEnd() {
-        //判断时候是有子item，如果没有就返回true
+        //判断时候是否有子item，如果没有就返回true
         if (mRefreshableView.getChildCount() == 0) {
             return true;
         }
@@ -109,8 +59,7 @@ public class PullToRefreshRecyclerView extends PullToRefreshBase<RecyclerView> {
         int position = mRefreshableView.getChildLayoutPosition(view);
         //在view中显示的是最下面的一个，并且mRefreshableView也是最下面的一个
         //可以显示上拉加载更多的
-        if(position >= mRefreshableView.getAdapter().getItemCount()-1)
-        {
+        if (position >= mRefreshableView.getAdapter().getItemCount() - 1) {
             return view.getBottom() <= mRefreshableView.getBottom();
         }
         return false;
@@ -118,6 +67,7 @@ public class PullToRefreshRecyclerView extends PullToRefreshBase<RecyclerView> {
 
     /**
      * 这个是下拉刷新的实现
+     *
      * @return
      */
     protected boolean isReadyForPullStart() {
@@ -135,15 +85,15 @@ public class PullToRefreshRecyclerView extends PullToRefreshBase<RecyclerView> {
         return false;
     }
 
-    public void setLayoutManager(RecyclerView.LayoutManager manager){
+    public void setLayoutManager(RecyclerView.LayoutManager manager) {
         mRefreshableView.setLayoutManager(manager);
     }
 
-    public void addItemDecotation(RecyclerView.ItemDecoration itemDecoration){
+    public void addItemDecotation(RecyclerView.ItemDecoration itemDecoration) {
         mRefreshableView.addItemDecoration(itemDecoration);
     }
 
-    public void setAdapter(RecyclerView.Adapter adapter){
+    public void setAdapter(RecyclerView.Adapter adapter) {
         mRefreshableView.setAdapter(adapter);
     }
 }

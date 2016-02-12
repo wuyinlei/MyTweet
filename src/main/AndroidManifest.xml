@@ -42,7 +42,7 @@
         <activity android:name=".activity.MentionActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
-        <activity android:name=".activity.LikedActivity"
+        <activity android:name=".activity.FavActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
         <activity android:name=".activity.CommentActivity"

@@ -1,14 +1,14 @@
 package com.example.annation.presenter;
 
-import android.util.Log;
 
 import com.example.annation.http.BaseNetWork;
 import com.example.annation.http.HttpResponse;
-import com.example.annation.status.StatusEntity;
+import com.example.annation.status.FavEntity;
 import com.example.annation.uri.Contants;
 import com.example.annation.uri.ParameterKeySet;
+import com.example.annation.utils.LogUtils;
 import com.example.annation.utils.PreferenceUtils;
-import com.example.annation.view.HomeView;
+import com.example.annation.view.FavoriteView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sina.weibo.sdk.net.WeiboParameters;
@@ -17,28 +17,18 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by 若兰 on 2016/2/9.
- * 一个懂得了编程乐趣的小白，希望自己
- * 能够在这个道路上走的很远，也希望自己学习到的
- * 知识可以帮助更多的人,分享就是学习的一种乐趣
- * QQ:1069584784
- * csdn:http://blog.csdn.net/wuyinlei
- */
-
-public class MentionPresenterImp implements BasePresenter {
-
-    private HomeView mView;
-    private PreferenceUtils mUtils;
+public class FavPresenterImp implements BasePresenter {
+    private FavoriteView mView;
+    private PreferenceUtils mSPUtils;
     private WeiboParameters mParameters;
     private int page = 1;
-    private List<StatusEntity> mEntities;
+    private List<FavEntity> mEntityList;
 
-    public MentionPresenterImp(HomeView view) {
+    public FavPresenterImp(FavoriteView view) {
         mView = view;
-        mUtils = PreferenceUtils.getInstance(mView.getActivity());
+        mSPUtils = PreferenceUtils.getInstance(mView.getActivity());
         mParameters = new WeiboParameters(Contants.APP_KEY);
-        mEntities = new ArrayList<>();
+        mEntityList = new ArrayList<>();
     }
 
     @Override
@@ -51,35 +41,35 @@ public class MentionPresenterImp implements BasePresenter {
     public void loadMore(boolean showLoading) {
         page++;
         loadData(true, showLoading);
+
     }
 
     private void loadData(final boolean loadMore, boolean showLoading) {
 
-        new BaseNetWork(mView, Contants.API.MENTIONS, showLoading) {
-
-            @Override
+        new BaseNetWork(mView, Contants.API.FAVOURITES, showLoading) {
             public WeiboParameters onPrepares() {
-                mParameters.put(ParameterKeySet.AUTH_ACCESS_TOKEN, mUtils.getToken().getToken());
+                mParameters.put(ParameterKeySet.AUTH_ACCESS_TOKEN, mSPUtils
+                        .getToken().getToken());
                 mParameters.put(ParameterKeySet.PAGE, page);
                 mParameters.put(ParameterKeySet.COUNT, 10);
                 return mParameters;
             }
 
-            @Override
+
             public void onFinish(HttpResponse response, boolean success) {
                 if (success) {
-
-                    Log.d("MentionPresenterImp", response.response);
-                    Type type = new TypeToken<List<StatusEntity>>() {
+                    LogUtils.e(response.response);
+                    Type type = new TypeToken<ArrayList<FavEntity>>() {
                     }.getType();
-                    List<StatusEntity> list = new Gson().fromJson(response.response, type);
+                    List<FavEntity> list = new Gson().fromJson(response.response, type);
                     if (!loadMore) {
-                        mEntities.clear();
+                        mEntityList.clear();
                     }
-                    mEntities.addAll(list);
-                    mView.onSuccess(mEntities);
+                    mEntityList.addAll(list);
+                    mView.onSuccess(mEntityList);
                 }
             }
         }.get();
+
     }
 }

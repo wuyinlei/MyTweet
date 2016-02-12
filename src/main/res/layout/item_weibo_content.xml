@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/tweet_white"
+              android:orientation="vertical">
+
+    <include layout="@layout/layout_status_header"/>
+
+    <ImageView
+        android:id="@+id/ivContent"
+        android:layout_width="@dimen/avatar_size_xxl"
+        android:layout_height="@dimen/avatar_size_xxl"
+        android:layout_margin="@dimen/space_m"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_place_holder"/>
+
+    <LinearLayout
+        android:id="@+id/llRe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/tweet_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvReContent"
+            style="@style/tv_m_black_sl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/space_s"
+            android:singleLine="false"
+            android:text="@string/empty_string"/>
+
+        <ImageView
+            android:id="@+id/ivReContent"
+            android:layout_width="@dimen/avatar_size_xxl"
+            android:layout_height="@dimen/avatar_size_xxl"
+            android:layout_margin="@dimen/space_m"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_place_holder"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_m">
+
+        <com.example.annation.widget.DrawCenterTextView
+            android:id="@+id/tvRetweet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/tweet_white"
+            android:drawableLeft="@mipmap/ic_toolbar_icon_retweet"
+            android:drawablePadding="@dimen/space_s"
+            android:text="@string/empty_string"/>
+
+        <View
+            android:layout_width="@dimen/height_divider"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/space_s"
+            android:layout_marginRight="@dimen/space_s"
+            android:background="@color/tweet_grey"/>
+
+        <com.example.annation.widget.DrawCenterTextView
+            android:id="@+id/tvLike"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/tweet_white"
+            android:drawableLeft="@mipmap/ic_icon_unlike"
+            android:drawablePadding="@dimen/space_s"
+            android:text="@string/empty_string"/>
+
+        <View
+            android:layout_width="@dimen/height_divider"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/space_s"
+            android:layout_marginRight="@dimen/space_s"
+            android:background="@color/tweet_grey"/>
+
+        <com.example.annation.widget.DrawCenterTextView
+            android:id="@+id/tvComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/tweet_white"
+            android:drawableLeft="@mipmap/ic_toolbar_icon_comment"
+            android:drawablePadding="@dimen/space_s"
+            android:text="@string/empty_string"/>
+    </LinearLayout>
+</LinearLayout>
