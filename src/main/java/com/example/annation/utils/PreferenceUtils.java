@@ -3,7 +3,6 @@ package com.example.annation.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -60,6 +59,12 @@ public class PreferenceUtils {
         //然后就可以通过获取到的editor的实例来存储对象了，最后调用commit()这个方法提交保存的数据
         mEditor.putString(ACCESS_TOKEN, new Gson().toJson(accessToken)).commit();
         mEditor.putBoolean(IS_LOGIN, true).commit();
+    }
+
+    public void logOut(){
+        mEditor.remove(ACCESS_TOKEN);
+        mEditor.remove(IS_LOGIN);
+        mEditor.commit();
     }
 
     /**

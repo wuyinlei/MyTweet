@@ -1,5 +1,6 @@
 package com.example.annation.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.annation.R;
+import com.example.annation.activity.FansActivity;
 import com.example.annation.presenter.ProfilePresenter;
 import com.example.annation.presenter.ProfilePresenterImp;
 import com.example.annation.status.UserEntity;
@@ -52,7 +54,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         tvUserName = (TextView) view.findViewById(R.id.tvUserName);
         tvDes = (TextView) view.findViewById(R.id.tvDes);
         tvAttentions = (TextView) view.findViewById(R.id.tvAttentions);
+        tvAttentions.setOnClickListener(this);
         tvFans = (TextView) view.findViewById(R.id.tvFans);
+        tvFans.setOnClickListener(this);
         tvLoginOut = (TextView) view.findViewById(R.id.tvLoginOut);
         tvLoginOut.setOnClickListener(this);
     }
@@ -60,6 +64,24 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
 
+        Intent intent;
+        switch (v.getId()){
+            case R.id.tvFans:
+                intent = new Intent(getActivity(),FansActivity.class);
+                intent.setAction("tvFans");
+                startActivity(intent);
+                break;
+
+            case R.id.tvAttentions:
+                intent = new Intent(getActivity(),FansActivity.class);
+                intent.setAction("tvAttentions");
+                startActivity(intent);
+
+            case R.id.tvLoginOut:
+                    //删除本地的用户数据
+
+                break;
+        }
     }
 
     @Override

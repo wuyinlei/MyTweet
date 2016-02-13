@@ -68,6 +68,19 @@ public class Contants {
          * 用户信息
          */
         public static final String USER_INFO = HOME_BASE_URL + "users/show.json";
+
+        /**
+         * 普通写入
+         */
+        public static final String USER_REPOST = HOME_BASE_URL + "statuses/upload.json";
+
+        /**
+         * 粉丝接口
+         */
+        public static final String FRIENDS = HOME_BASE_URL+"friendships/friends.json";
+
+
+        public static final String FOLLOWERS =HOME_BASE_URL+"friendships/followers.json";
     }
 }
 

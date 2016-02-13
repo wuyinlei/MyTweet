@@ -1,5 +1,8 @@
 package com.example.annation.presenter;
 
+import android.content.Intent;
+
+import com.example.annation.activity.LandingPageActivity;
 import com.example.annation.http.BaseNetWork;
 import com.example.annation.http.HttpResponse;
 import com.example.annation.status.UserEntity;
@@ -37,5 +40,12 @@ public class ProfilePresenterImp implements ProfilePresenter {
                 }
             }
         }.get();
+    }
+
+    @Override
+    public void logOut() {
+        mSPUtils.logOut();
+        mProfileView.getActivity().startActivity(new Intent(mProfileView.getActivity(), LandingPageActivity.class));
+        mProfileView.getActivity().finish();
     }
 }
