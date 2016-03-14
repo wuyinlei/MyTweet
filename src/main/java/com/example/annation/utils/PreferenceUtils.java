@@ -61,8 +61,13 @@ public class PreferenceUtils {
         mEditor.putBoolean(IS_LOGIN, true).commit();
     }
 
+    /**
+     * 退出登录的方法
+     */
     public void logOut(){
+        //把之前的ACCESS_TOKEN删除
         mEditor.remove(ACCESS_TOKEN);
+        //把之前登录的删除
         mEditor.remove(IS_LOGIN);
         mEditor.commit();
     }

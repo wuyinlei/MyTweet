@@ -14,7 +14,7 @@ import java.util.List;
  * csdn:http://blog.csdn.net/wuyinlei
  */
 
-public class FansAdapter extends CommenAdapter<UserEntity>{
+public class FansAdapter extends CommentAdapter<UserEntity> {
 
 
 

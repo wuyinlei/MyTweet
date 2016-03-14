@@ -16,12 +16,12 @@ import java.util.List;
  * csdn:http://blog.csdn.net/wuyinlei
  */
 
-public abstract class CommenAdapter<T> extends RecyclerView.Adapter<CommonViewHolder> {
+public abstract class CommentAdapter<T> extends RecyclerView.Adapter<CommonViewHolder> {
 
     private List<T> mTList;
     private int layoutId;
 
-    public CommenAdapter(List<T> TList, int layoutId) {
+    public CommentAdapter(List<T> TList, int layoutId) {
         mTList = TList;
         this.layoutId = layoutId;
     }

@@ -1,6 +1,7 @@
 package com.example.annation.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentTabHost;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,6 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 import com.example.annation.R;
 import com.example.annation.fragment.HomeFragment;
@@ -37,6 +39,8 @@ public class HomePageActivity extends BaseActivity {
     private Class fragment[];
     //在这里给一个menu_id,来判断是否需要menu
     private int menu_id = R.menu.menu_main;
+
+    private boolean isExit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +128,25 @@ public class HomePageActivity extends BaseActivity {
                 supportInvalidateOptionsMenu();
             }
         });
+    }
+
+    /**
+     * 连续点击两次退出登录
+     */
+    public void onBackPressed(){
+        if (isExit){
+            this.finish();
+        } else {
+            Toast.makeText(this, "R.string.toast_press_again_to_exit:" + R.string.toast_press_again_to_exit, Toast.LENGTH_SHORT).show();
+            isExit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isExit = false;
+                }
+            },1000);
+        }
+
     }
 
 }

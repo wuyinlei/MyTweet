@@ -79,7 +79,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
 
             case R.id.tvLoginOut:
                     //删除本地的用户数据
-
+                mPresenter.logOut();
                 break;
         }
     }

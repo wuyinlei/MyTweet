@@ -45,6 +45,7 @@ public class ProfilePresenterImp implements ProfilePresenter {
     @Override
     public void logOut() {
         mSPUtils.logOut();
+        //调转到授权登录页面
         mProfileView.getActivity().startActivity(new Intent(mProfileView.getActivity(), LandingPageActivity.class));
         mProfileView.getActivity().finish();
     }
